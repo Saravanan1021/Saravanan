@@ -1,0 +1,15 @@
+services:
+  - type: web_service
+    name: thozhil2-backend
+    env: node
+    plan: starter
+    branch: main
+    buildCommand: npm install
+    startCommand: npm start
+    disk:
+      name: data
+      path: /data
+      sizeGB: 1
+    envVars:
+      - key: DATA_DIR
+        value: /data

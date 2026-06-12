@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const cors = require('cors');
@@ -8,6 +9,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const DATA_DIR = process.env.DATA_DIR || __dirname;
 const USE_TWILIO = String(process.env.USE_TWILIO).toLowerCase() === 'true';
 const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
 const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
@@ -23,7 +25,10 @@ if (USE_TWILIO) {
   }
 }
 
-const dbPath = path.join(__dirname, 'data.sqlite');
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+}
+const dbPath = path.join(DATA_DIR, 'data.sqlite');
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('Failed to open database', err);
